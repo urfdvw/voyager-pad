@@ -1,1 +1,1 @@
-from testscreen import *
+from test_macropad_class import *
