@@ -68,6 +68,7 @@ from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
 from adafruit_hid.consumer_control import ConsumerControl
 from adafruit_hid.consumer_control_code import ConsumerControlCode
+from adafruit_hid.mouse import Mouse
 
 class MacroPad:
     def __init__(
@@ -87,18 +88,23 @@ class MacroPad:
         self.keyboard = Keyboard(hid.devices)
         self.keyboard_layout = KeyboardLayoutUS(self.keyboard)
         self.consumer_control = ConsumerControl(hid.devices)
+        self.mouse = Mouse(hid.devices)
     
     def press_code(self, code):
         if code in Keycode.__dict__:
             self.keyboard.press(Keycode.__dict__[code])
         elif code in ConsumerControlCode.__dict__:
             self.consumer_control.press(ConsumerControlCode.__dict__[code])
+        elif code in Mouse.__dict__:
+            self.mouse.press(Mouse.__dict__[code])
             
     def release_code(self, code):
         if code in Keycode.__dict__:
             self.keyboard.release(Keycode.__dict__[code])
         elif code in ConsumerControlCode.__dict__:
             self.consumer_control.release()
+        elif code in Mouse.__dict__:
+            self.mouse.release(Mouse.__dict__[code])
             
     def press_sec(self, sec):
         if len(sec[0]) == 0:

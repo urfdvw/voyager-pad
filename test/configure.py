@@ -16,9 +16,9 @@ configure = {
     },
     0: { # with modifier
         2: "'hi level0'", # upper row
-        3: "",
-        4: "",
-        5: "",
+        3: "LEFT_BUTTON",
+        4: "MIDDLE_BUTTON",
+        5: "RIGHT_BUTTON",
         6: "", # nob
         7: "", # clock
         8: "", # counterclock
@@ -56,5 +56,5 @@ A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, ON
 mediacontroll
 RECORD, FAST_FORWARD, REWIND, SCAN_NEXT_TRACK, SCAN_PREVIOUS_TRACK, STOP, EJECT, PLAY_PAUSE, MUTE, VOLUME_DECREMENT, VOLUME_INCREMENT, BRIGHTNESS_DECREMENT, BRIGHTNESS_INCREMENT
 mouse
-
+RIGHT_BUTTON, LEFT_BUTTON, MIDDLE_BUTTON
 """
