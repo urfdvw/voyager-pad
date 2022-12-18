@@ -89,16 +89,16 @@ class MacroPad:
         self.consumer_control = ConsumerControl(hid.devices)
     
     def press_code(self, code):
-        if code[0] == '_':
-            self.consumer_control.press(ConsumerControlCode.__dict__[code[1:]])
-        else:
+        if code in Keycode.__dict__:
             self.keyboard.press(Keycode.__dict__[code])
+        elif code in ConsumerControlCode.__dict__:
+            self.consumer_control.press(ConsumerControlCode.__dict__[code])
             
     def release_code(self, code):
-        if code[0] == '_':
-            self.consumer_control.release()
-        else:
+        if code in Keycode.__dict__:
             self.keyboard.release(Keycode.__dict__[code])
+        elif code in ConsumerControlCode.__dict__:
+            self.consumer_control.release()
             
     def press_sec(self, sec):
         if len(sec[0]) == 0:
