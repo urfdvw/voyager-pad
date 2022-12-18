@@ -97,6 +97,9 @@ class MacroPad:
             self.consumer_control.press(ConsumerControlCode.__dict__[code])
         elif code in Mouse.__dict__:
             self.mouse.press(Mouse.__dict__[code])
+        elif code.startswith('MOUSE_MOVE'):
+            x, y, w = [int(sec) for sec in code.split('_')[-3:]]
+            self.mouse.move(x=x,y=y,wheel=w)
             
     def release_code(self, code):
         if code in Keycode.__dict__:
