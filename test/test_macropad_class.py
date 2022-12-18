@@ -63,16 +63,12 @@ class MacroKeyPad:
         return self._events
 
 
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
 from adafruit_hid.consumer_control import ConsumerControl
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 
-Keycode_names = {Keycode.__dict__[k]: k for k in Keycode.__dict__ if k[0].isupper()}
-ConsumerControlCode_names = {ConsumerControlCode.__dict__[k]: k for k in ConsumerControlCode.__dict__ if k[0].isupper()}
-
-from configure import configure
-       
 class MacroPad:
     def __init__(
         self,
@@ -83,19 +79,78 @@ class MacroPad:
         self.macrokeypad = macrokeypad
         self.configure = configure
         
-        self.layer = 0
+        self.layer = -1
         self.n_layer_key_press = 0
         self.n_key_press = 0
         
         
-        self.kbd = Keyboard(hid.devices)
+        self.keyboard = Keyboard(hid.devices)
+        self.keyboard_layout = KeyboardLayoutUS(self.keyboard)
         self.consumer_control = ConsumerControl(hid.devices)
-        
+    
+    def press_code(self, code):
+        if code[0] == '_':
+            self.consumer_control.press(ConsumerControlCode.__dict__[code[1:]])
+        else:
+            self.keyboard.press(Keycode.__dict__[code])
+            
+    def release_code(self, code):
+        if code[0] == '_':
+            self.consumer_control.release()
+        else:
+            self.keyboard.release(Keycode.__dict__[code])
+            
+    def press_sec(self, sec):
+        if len(sec[0]) == 0:
+            return
+        if sec[0][0] == "'":
+            return
+        else:
+            for code in sec:
+                self.press_code(code)
+            
+    def release_sec(self, sec):
+        if len(sec[0]) == 0:
+            return
+        if sec[0][0] == "'":
+            self.keyboard_layout.write(sec[0][1:-1])
+        else:
+            for code in sec:
+                self.release_code(code)
+            
+    
     def __call__(self):
-        pass
-
+        # get event
+        event = self.macrokeypad.events.get()
+        if event is None:
+            return
+        # count press
+        self.n_key_press += 1 if event.pressed else -1
+        if event.key_number in self.configure.configure:
+            self.n_layer_key_press += 1 if event.pressed else -1
+        # get layer
+        if event.key_number in self.configure.configure:
+            if event.pressed:
+                self.layer = event.key_number
+            if self.n_layer_key_press == 0:
+                self.layer = -1
+        # get sequence
+        else:
+            seq = self.configure.sequence[self.layer][event.key_number]
+            
+            # print(seq)
+            if event.pressed:
+                for i in range(len(seq)):
+                    self.press_sec(seq[i])
+                    if i != len(seq) - 1:
+                        self.release_sec(seq[i])
+            else:
+                self.release_sec(seq[-1])
+        
+# ---------------------------------------
 import board
 import usb_hid
+import configure
 
 macrokeypad = MacroKeyPad(
     key_pins=(
@@ -122,3 +177,6 @@ macropad = MacroPad(
 # while True:
 #     if event := macrokeypad.events.get():
 #         print(event)
+        
+while True:
+    macropad()
