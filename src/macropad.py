@@ -7,7 +7,6 @@ import keypad
 import displayio
 from terminalio import FONT
 from adafruit_display_text.label import Label
-from adafruit_display_text.scrolling_label import ScrollingLabel
 from adafruit_display_text import wrap_text_to_lines
 # hid libs
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
@@ -45,14 +44,14 @@ class MacroKeyPad:
         # hardware
         self.encoder=rotaryio.IncrementalEncoder(*encoder_pins)
         self.keys = keypad.Keys(
-            key_pins, 
+            key_pins,
             pull=True,
             value_when_pressed=False
         )
         self.n_keys = len(key_pins)
         # queue
         self._events = EventQueue()
-        
+
     @property
     def events(self):
         position = self.encoder.position
@@ -73,31 +72,42 @@ class MacroKeyPad:
                     )
                 )
             self.encoder.position = 0
-                
+
         while event := self.keys.events.get():
             self._events.append(event)
         return self._events
 
 
 class MacroPadDisplay:
-    def __init__(self, configure):
-        self.configure = configure
-        self.layer_text = {
-            layer: '\n'.join(wrap_text_to_lines(
-                ' '.join([
-                    str(key_number) + ':' + configure[layer][key_number][0]
-                    for key_number in sorted(configure[layer].keys())
-                    if configure[layer][key_number][0]
-                ])
-            , 128 // 6))
-            for layer in configure
-        }
+    def __init__(self, display):
+        self.display = display
+        self.splash = displayio.Group()
+        self.display.show(self.splash)
+
+        self.layer_group = displayio.Group()
+        self.splash.append(self.layer_group)
+        self.layer_group.hidden = False
+        self.layer_lable = Label(
+            FONT,
+            text='',
+        )
+        self.layer_group.append(self.layer_lable)
+
+        self.macro_group = displayio.Group()
+        self.splash.append(self.macro_group)
+        self.macro_group.hidden = True
+        self.macro_lable = Label(
+            FONT,
+            text='',
+            scale=2,
+        )
+        self.macro_group.append(self.macro_lable)
+
         self.layer = -1
         self.state = 0
-        
-    def show_layer(self, layer):
-        text = self.layer_text[layer]
-        if (self.layer_lable.text == text 
+
+    def show_layer(self, text, layer):
+        if (self.layer_lable.text == text
         and self.state == 0):
             return
         self.state = 0
@@ -105,9 +115,8 @@ class MacroPadDisplay:
         self.layer_lable.text = text
         self.layer_group.hidden = False
         self.macro_group.hidden = True
-        
-    def show_macro(self, key_number):
-        text = self.configure[self.layer][key_number][0]
+
+    def show_macro(self, text):
         if (self.macro_lable.text == text
         and self.state == 1):
             return
@@ -119,39 +128,40 @@ class MacroPadDisplay:
 
 class MONO_128x32(MacroPadDisplay):
     def __init__(self, configure, display):
-        super().__init__(configure)
+        super().__init__(display)
+        self.configure = configure.configure
+        self.layer_text = {
+            layer: '\n'.join(wrap_text_to_lines(
+                ' '.join([
+                    str(key_number) + ':' + self.configure[layer][key_number][0]
+                    for key_number in sorted(self.configure[layer].keys())
+                    if self.configure[layer][key_number][0]
+                ])
+            , 128 // 6))
+            for layer in self.configure
+        }
         # print(self.layer_text)
-        self.display = display
-        self.splash = displayio.Group()
-        self.display.show(self.splash)
+
+        self.layer_lable.color=0xFFFFFF
+        self.layer_lable.background_color=0x000000
+        self.layer_lable.x=0
+        self.layer_lable.y=7
+        self.layer_lable.line_spacing=0.8
+
+        self.macro_lable.color=0xFFFFFF
+        self.macro_lable.background_color=0x000000
+        self.macro_lable.x=0
+        self.macro_lable.y=15
         
-        self.layer_group = displayio.Group()
-        self.splash.append(self.layer_group)
-        self.layer_group.hidden = False
-        self.layer_lable = Label(
-            FONT,
-            text=self.layer_text[self.layer],
-            color=0xFFFFFF,
-            background_color=0x000000,
-            anchor_point=(0, 0),
-            x=0, y=7,
-            scale=1,
-            line_spacing=0.8
-        )
-        self.layer_group.append(self.layer_lable)
-        
-        self.macro_group = displayio.Group()
-        self.splash.append(self.macro_group)
-        self.macro_group.hidden = True
-        self.macro_lable = Label(
-            FONT,
-            text='',
-            color=0xFFFFFF,
-            background_color=0x000000,
-            x=0, y=15,
-            scale=2
-        )
-        self.macro_group.append(self.macro_lable)
+        self.show_layer(-1)
+
+    def show_layer(self, layer):
+        text = self.layer_text[layer]
+        super().show_layer(text, layer)
+
+    def show_macro(self, key_number):
+        text = self.configure[self.layer][key_number][0]
+        super().show_macro(text)
 
 class MacroPad:
     def __init__(
@@ -164,21 +174,21 @@ class MacroPad:
         self.macrokeypad = macrokeypad
         self.macropaddisp = macropaddisp
         self.configure = configure
-        
+
         self.layer = -1
         self.n_layer_key_press = 0
         self.n_key_press = 0
-        
+
         self.keyboard = Keyboard(hid.devices)
         self.keyboard_layout = KeyboardLayoutUS(self.keyboard)
         self.consumer_control = ConsumerControl(hid.devices)
         self.mouse = Mouse(hid.devices)
-        
+
         if self.macropaddisp:
             self.start_time = monotonic()
             self.CD = 1
             self.displaying_macro = False
-    
+
     def press_code(self, code):
         if code in Keycode.__dict__:
             self.keyboard.press(Keycode.__dict__[code])
@@ -189,7 +199,7 @@ class MacroPad:
         elif code.startswith('MOUSE_MOVE'):
             x, y, w = [int(hotkey) for hotkey in code.split('_')[-3:]]
             self.mouse.move(x=x,y=y,wheel=w)
-            
+
     def release_code(self, code):
         if code in Keycode.__dict__:
             self.keyboard.release(Keycode.__dict__[code])
@@ -197,7 +207,7 @@ class MacroPad:
             self.consumer_control.release()
         elif code in Mouse.__dict__:
             self.mouse.release(Mouse.__dict__[code])
-            
+
     def press_hotkey(self, hotkey):
         if len(hotkey[0]) == 0:
             return
@@ -206,7 +216,7 @@ class MacroPad:
         else:
             for code in hotkey:
                 self.press_code(code)
-            
+
     def release_hotkey(self, hotkey):
         if len(hotkey[0]) == 0:
             return
@@ -245,7 +255,7 @@ class MacroPad:
         # get macro
         else:
             macro = self.configure.macro[self.layer][event.key_number]
-            
+
             # print(macro)
             if event.pressed:
                 for i in range(len(macro)):
