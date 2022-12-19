@@ -222,8 +222,8 @@ class MacroPad:
             return
         if hotkey[0][0] == "'":
             self.keyboard_layout.write(hotkey[0][1:-1])
-        else:
-            for code in hotkey:
+        else
+            for code in reversed(hotkey):
                 self.release_code(code)
 
     def __call__(self):
