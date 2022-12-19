@@ -63,6 +63,90 @@ class MacroKeyPad:
         return self._events
 
 
+import displayio
+from terminalio import FONT
+from adafruit_display_text.label import Label
+from adafruit_display_text.scrolling_label import ScrollingLabel
+from adafruit_display_text import wrap_text_to_lines
+
+class MacroPadDisplay:
+    def __init__(self, configure):
+        self.configure = configure
+        self.layer_text = {
+            layer: '\n'.join(wrap_text_to_lines(
+                ' '.join([
+                    str(key_number) + ':' + configure[layer][key_number][0]
+                    for key_number in sorted(configure[layer].keys())
+                    if configure[layer][key_number][0]
+                ])
+            , 128 // 6))
+            for layer in configure
+        }
+        self.layer = -1
+        self.state = 0
+    def show_layer(self, layer):
+        raise NotImplementedError
+    def show_macro(self, key_number):
+        raise NotImplementedError
+    
+class MONO_128x32(MacroPadDisplay):
+    def __init__(self, configure, display):
+        super().__init__(configure)
+        # print(self.layer_text)
+        self.display = display
+        self.splash = displayio.Group()
+        self.display.show(self.splash)
+        
+        self.layer_group = displayio.Group()
+        self.splash.append(self.layer_group)
+        self.layer_group.hidden = False
+        self.layer_lable = Label(
+            FONT,
+            text=self.layer_text[self.layer],
+            color=0xFFFFFF,
+            background_color=0x000000,
+            anchor_point=(0, 0),
+            x=0, y=7,
+            scale=1,
+            line_spacing=0.8
+        )
+        self.layer_group.append(self.layer_lable)
+        
+        self.macro_group = displayio.Group()
+        self.splash.append(self.macro_group)
+        self.macro_group.hidden = True
+        self.macro_lable = Label(
+            FONT,
+            text='',
+            color=0xFFFFFF,
+            background_color=0x000000,
+            x=0, y=15,
+            scale=2
+        )
+        self.macro_group.append(self.macro_lable)
+        
+    def show_layer(self, layer):
+        text = self.layer_text[layer]
+        if (self.layer_lable.text == text 
+        and self.state == 0):
+            return
+        self.state = 0
+        self.layer = layer
+        self.layer_lable.text = text
+        self.layer_group.hidden = False
+        self.macro_group.hidden = True
+        
+    def show_macro(self, key_number):
+        text = self.configure[self.layer][key_number][0]
+        if (self.macro_lable.text == text
+        and self.state == 1):
+            return
+        self.state = 1
+        self.macro_lable.text = text
+        self.layer_group.hidden = True
+        self.macro_group.hidden = False
+        
+
 from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
@@ -74,10 +158,12 @@ class MacroPad:
     def __init__(
         self,
         macrokeypad,
+        macropaddisp,
         configure,
         hid,
     ):
         self.macrokeypad = macrokeypad
+        self.macropaddisp = macropaddisp
         self.configure = configure
         
         self.layer = -1
@@ -98,7 +184,7 @@ class MacroPad:
         elif code in Mouse.__dict__:
             self.mouse.press(Mouse.__dict__[code])
         elif code.startswith('MOUSE_MOVE'):
-            x, y, w = [int(sec) for sec in code.split('_')[-3:]]
+            x, y, w = [int(hotkey) for hotkey in code.split('_')[-3:]]
             self.mouse.move(x=x,y=y,wheel=w)
             
     def release_code(self, code):
@@ -109,22 +195,22 @@ class MacroPad:
         elif code in Mouse.__dict__:
             self.mouse.release(Mouse.__dict__[code])
             
-    def press_sec(self, sec):
-        if len(sec[0]) == 0:
+    def press_hotkey(self, hotkey):
+        if len(hotkey[0]) == 0:
             return
-        if sec[0][0] == "'":
+        if hotkey[0][0] == "'":
             return
         else:
-            for code in sec:
+            for code in hotkey:
                 self.press_code(code)
             
-    def release_sec(self, sec):
-        if len(sec[0]) == 0:
+    def release_hotkey(self, hotkey):
+        if len(hotkey[0]) == 0:
             return
-        if sec[0][0] == "'":
-            self.keyboard_layout.write(sec[0][1:-1])
+        if hotkey[0][0] == "'":
+            self.keyboard_layout.write(hotkey[0][1:-1])
         else:
-            for code in sec:
+            for code in hotkey:
                 self.release_code(code)
             
     
@@ -141,25 +227,38 @@ class MacroPad:
         if event.key_number in self.configure.configure:
             if event.pressed:
                 self.layer = event.key_number
+                self.macropaddisp.show_layer(self.layer)
             if self.n_layer_key_press == 0:
                 self.layer = -1
-        # get sequence
+                self.macropaddisp.show_layer(self.layer)
+        # get macro
         else:
-            seq = self.configure.sequence[self.layer][event.key_number]
+            macro = self.configure.macro[self.layer][event.key_number]
             
-            # print(seq)
+            # print(macro)
             if event.pressed:
-                for i in range(len(seq)):
-                    self.press_sec(seq[i])
-                    if i != len(seq) - 1:
-                        self.release_sec(seq[i])
+                for i in range(len(macro)):
+                    self.press_hotkey(macro[i])
+                    if i != len(macro) - 1:
+                        self.release_hotkey(macro[i])
+                self.macropaddisp.show_macro(event.key_number)
             else:
-                self.release_sec(seq[-1])
+                self.release_hotkey(macro[-1])
+                self.macropaddisp.show_layer(self.layer)
         
 # ---------------------------------------
 import board
+import busio
 import usb_hid
 import configure
+import displayio
+import adafruit_displayio_ssd1306
+
+displayio.release_displays()
+i2c = busio.I2C(board.SCL, board.SDA, frequency=int(1e6))
+display_bus = displayio.I2CDisplay(i2c, device_address=0x3C)
+display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=32)
+macropaddisp = MONO_128x32(configure.configure, display)
 
 macrokeypad = MacroKeyPad(
     key_pins=(
@@ -179,6 +278,7 @@ macrokeypad = MacroKeyPad(
 
 macropad = MacroPad(
     macrokeypad=macrokeypad,
+    macropaddisp=macropaddisp,
     configure=configure,
     hid=usb_hid,
 )

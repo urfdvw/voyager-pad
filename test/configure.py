@@ -1,45 +1,45 @@
 """
-| press at the same time,
-~ press in sequence
+| connects keys in hotkey, press at the same time,
+~ connects hotkeys in macro, press in sequence
 '' type out as is
 """
 
 configure = {
     -1: { # without modifier
-        2: "ALT", # upper row
-        3: "GUI|V",
-        4: "GUI|A~GUI|C",
-        5: "'Hello, World!'",
-        6: "PLAY_PAUSE", # nob
-        7: "VOLUME_INCREMENT", # clock
-        8: "VOLUME_DECREMENT", # counterclock
+        2: ("Alt", "ALT"), # upper row
+        3: ("Paste", "GUI|V"),
+        4: ("Copy All", "GUI|A~GUI|C"),
+        5: ("HW", "'Hello, World!'"),
+        6: (">", "PLAY_PAUSE"), # nob
+        7: ("Vol+", "VOLUME_INCREMENT"), # clock
+        8: ("Vol-", "VOLUME_DECREMENT"), # counterclock
     },
     0: { # with modifier
-        2: "'hi level0'", # upper row
-        3: "LEFT_BUTTON",
-        4: "MIDDLE_BUTTON",
-        5: "RIGHT_BUTTON",
-        6: "", # nob
-        7: "MOUSE_MOVE_10_10_0", # clock
-        8: "MOUSE_MOVE_-10_-10_0", # counterclock
+        2: ("", "'hi level0'"), # upper row
+        3: ("", "LEFT_BUTTON"),
+        4: ("", "MIDDLE_BUTTON"),
+        5: ("", "RIGHT_BUTTON"),
+        6: ("", ""), # nob
+        7: ("", "MOUSE_MOVE_10_10_0"), # clock
+        8: ("", "MOUSE_MOVE_-10_-10_0"), # counterclock
     },
     1: { # with modifier
-        2: "'hi level1'", # upper row
-        3: "",
-        4: "",
-        5: "",
-        6: "", # nob
-        7: "", # clock
-        8: "", # counterclock
+        2: ("", "'hi level1'"), # upper row
+        3: ("", ""),
+        4: ("", ""),
+        5: ("", ""),
+        6: ("", ""), # nob
+        7: ("", ""), # clock
+        8: ("", ""), # counterclock
     },
 }
 
-sequence = {
+macro = {
     layer: { 
         key_number: [
-            [key.strip() for key in sec.split('|')]
-            for sec 
-            in configure[layer][key_number].split('~')
+            [key.strip("", ) for key in hotkey.split( '|')]
+            for hotkey 
+            in configure[layer][key_number][1].split( '~')
         ]
         for key_number in configure[layer]
     }
