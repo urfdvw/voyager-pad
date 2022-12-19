@@ -157,9 +157,9 @@ class MacroPad:
     def __init__(
         self,
         macrokeypad,
-        macropaddisp,
         configure,
         hid,
+        macropaddisp=None,
     ):
         self.macrokeypad = macrokeypad
         self.macropaddisp = macropaddisp
@@ -174,9 +174,10 @@ class MacroPad:
         self.consumer_control = ConsumerControl(hid.devices)
         self.mouse = Mouse(hid.devices)
         
-        self.start_time = monotonic()
-        self.CD = 1
-        self.displaying_macro = False
+        if self.macropaddisp:
+            self.start_time = monotonic()
+            self.CD = 1
+            self.displaying_macro = False
     
     def press_code(self, code):
         if code in Keycode.__dict__:
@@ -217,7 +218,7 @@ class MacroPad:
 
     def __call__(self):
         # reset layer screen
-        if self.displaying_macro:
+        if self.macropaddisp and self.displaying_macro:
             if (monotonic() - self.start_time > self.CD
             and self.n_key_press == 0):
                 self.macropaddisp.show_layer(self.layer)
@@ -235,10 +236,12 @@ class MacroPad:
         if event.key_number in self.configure.configure:
             if event.pressed:
                 self.layer = event.key_number
-                self.macropaddisp.show_layer(self.layer)
+                if self.macropaddisp:
+                    self.macropaddisp.show_layer(self.layer)
             if self.n_layer_key_press == 0:
                 self.layer = -1
-                self.macropaddisp.show_layer(self.layer)
+                if self.macropaddisp:
+                    self.macropaddisp.show_layer(self.layer)
         # get macro
         else:
             macro = self.configure.macro[self.layer][event.key_number]
@@ -249,8 +252,9 @@ class MacroPad:
                     self.press_hotkey(macro[i])
                     if i != len(macro) - 1:
                         self.release_hotkey(macro[i])
-                self.macropaddisp.show_macro(event.key_number)
-                self.displaying_macro = True
-                self.start_time = monotonic()
+                if self.macropaddisp:
+                    self.macropaddisp.show_macro(event.key_number)
+                    self.displaying_macro = True
+                    self.start_time = monotonic()
             else:
                 self.release_hotkey(macro[-1])
