@@ -10,7 +10,7 @@ configure = {
         3: ("Paste", "GUI|V"),
         4: ("Copy All", "GUI|A~GUI|C"),
         5: ("HW", "'Hello, World!'"),
-        6: (">", "PLAY_PAUSE"), # nob
+        6: ("Play/Pause", "PLAY_PAUSE"), # nob
         7: ("Vol+", "VOLUME_INCREMENT"), # clock
         8: ("Vol-", "VOLUME_DECREMENT"), # counterclock
     },
@@ -20,11 +20,11 @@ configure = {
         4: ("", "MIDDLE_BUTTON"),
         5: ("", "RIGHT_BUTTON"),
         6: ("", ""), # nob
-        7: ("", "MOUSE_MOVE_10_10_0"), # clock
-        8: ("", "MOUSE_MOVE_-10_-10_0"), # counterclock
+        7: ("Mouse Down", "MOUSE_MOVE_10_10_0"), # clock
+        8: ("Mouse UP", "MOUSE_MOVE_-10_-10_0"), # counterclock
     },
     1: { # with modifier
-        2: ("", "'hi level1'"), # upper row
+        2: ("greetings", "'hi level1'"), # upper row
         3: ("", ""),
         4: ("", ""),
         5: ("", ""),
