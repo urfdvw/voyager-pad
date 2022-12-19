@@ -1,6 +1,21 @@
-# cpy native
+# python native
+from time import monotonic
+# hardware libs
 import rotaryio
 import keypad
+# display libs
+import displayio
+from terminalio import FONT
+from adafruit_display_text.label import Label
+from adafruit_display_text.scrolling_label import ScrollingLabel
+from adafruit_display_text import wrap_text_to_lines
+# hid libs
+from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
+from adafruit_hid.keyboard import Keyboard
+from adafruit_hid.keycode import Keycode
+from adafruit_hid.consumer_control import ConsumerControl
+from adafruit_hid.consumer_control_code import ConsumerControlCode
+from adafruit_hid.mouse import Mouse
 
 class EventQueue:
     def __init__(self):
@@ -23,7 +38,8 @@ class EventQueue:
 
     def __bool__(self):
         return bool(self.data)
-        
+
+
 class MacroKeyPad:
     def __init__(self, key_pins, encoder_pins):
         # hardware
@@ -63,12 +79,6 @@ class MacroKeyPad:
         return self._events
 
 
-import displayio
-from terminalio import FONT
-from adafruit_display_text.label import Label
-from adafruit_display_text.scrolling_label import ScrollingLabel
-from adafruit_display_text import wrap_text_to_lines
-
 class MacroPadDisplay:
     def __init__(self, configure):
         self.configure = configure
@@ -84,11 +94,29 @@ class MacroPadDisplay:
         }
         self.layer = -1
         self.state = 0
+        
     def show_layer(self, layer):
-        raise NotImplementedError
+        text = self.layer_text[layer]
+        if (self.layer_lable.text == text 
+        and self.state == 0):
+            return
+        self.state = 0
+        self.layer = layer
+        self.layer_lable.text = text
+        self.layer_group.hidden = False
+        self.macro_group.hidden = True
+        
     def show_macro(self, key_number):
-        raise NotImplementedError
-    
+        text = self.configure[self.layer][key_number][0]
+        if (self.macro_lable.text == text
+        and self.state == 1):
+            return
+        self.state = 1
+        self.macro_lable.text = text
+        self.layer_group.hidden = True
+        self.macro_group.hidden = False
+
+
 class MONO_128x32(MacroPadDisplay):
     def __init__(self, configure, display):
         super().__init__(configure)
@@ -124,35 +152,6 @@ class MONO_128x32(MacroPadDisplay):
             scale=2
         )
         self.macro_group.append(self.macro_lable)
-        
-    def show_layer(self, layer):
-        text = self.layer_text[layer]
-        if (self.layer_lable.text == text 
-        and self.state == 0):
-            return
-        self.state = 0
-        self.layer = layer
-        self.layer_lable.text = text
-        self.layer_group.hidden = False
-        self.macro_group.hidden = True
-        
-    def show_macro(self, key_number):
-        text = self.configure[self.layer][key_number][0]
-        if (self.macro_lable.text == text
-        and self.state == 1):
-            return
-        self.state = 1
-        self.macro_lable.text = text
-        self.layer_group.hidden = True
-        self.macro_group.hidden = False
-        
-
-from adafruit_hid.keyboard_layout_us import KeyboardLayoutUS
-from adafruit_hid.keyboard import Keyboard
-from adafruit_hid.keycode import Keycode
-from adafruit_hid.consumer_control import ConsumerControl
-from adafruit_hid.consumer_control_code import ConsumerControlCode
-from adafruit_hid.mouse import Mouse
 
 class MacroPad:
     def __init__(
@@ -170,11 +169,14 @@ class MacroPad:
         self.n_layer_key_press = 0
         self.n_key_press = 0
         
-        
         self.keyboard = Keyboard(hid.devices)
         self.keyboard_layout = KeyboardLayoutUS(self.keyboard)
         self.consumer_control = ConsumerControl(hid.devices)
         self.mouse = Mouse(hid.devices)
+        
+        self.start_time = monotonic()
+        self.CD = 1
+        self.displaying_macro = False
     
     def press_code(self, code):
         if code in Keycode.__dict__:
@@ -212,17 +214,23 @@ class MacroPad:
         else:
             for code in hotkey:
                 self.release_code(code)
-            
-    
+
     def __call__(self):
+        # reset layer screen
+        if self.displaying_macro:
+            if (monotonic() - self.start_time > self.CD
+            and self.n_key_press == 0):
+                self.macropaddisp.show_layer(self.layer)
+                self.displaying_macro = False
         # get event
         event = self.macrokeypad.events.get()
         if event is None:
             return
         # count press
-        self.n_key_press += 1 if event.pressed else -1
         if event.key_number in self.configure.configure:
             self.n_layer_key_press += 1 if event.pressed else -1
+        else:
+            self.n_key_press += 1 if event.pressed else -1
         # get layer
         if event.key_number in self.configure.configure:
             if event.pressed:
@@ -242,11 +250,13 @@ class MacroPad:
                     if i != len(macro) - 1:
                         self.release_hotkey(macro[i])
                 self.macropaddisp.show_macro(event.key_number)
+                self.displaying_macro = True
+                self.start_time = monotonic()
             else:
                 self.release_hotkey(macro[-1])
-                self.macropaddisp.show_layer(self.layer)
-        
-# ---------------------------------------
+
+
+# main ---------------------------------------
 import board
 import busio
 import usb_hid
@@ -254,12 +264,13 @@ import configure
 import displayio
 import adafruit_displayio_ssd1306
 
+# define display
 displayio.release_displays()
 i2c = busio.I2C(board.SCL, board.SDA, frequency=int(1e6))
 display_bus = displayio.I2CDisplay(i2c, device_address=0x3C)
 display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=32)
 macropaddisp = MONO_128x32(configure.configure, display)
-
+# define keypad
 macrokeypad = MacroKeyPad(
     key_pins=(
         board.D10, # lower row
@@ -275,7 +286,7 @@ macrokeypad = MacroKeyPad(
         board.D7, # B
     )
 )
-
+# define macropad
 macropad = MacroPad(
     macrokeypad=macrokeypad,
     macropaddisp=macropaddisp,
@@ -283,9 +294,5 @@ macropad = MacroPad(
     hid=usb_hid,
 )
 
-# while True:
-#     if event := macrokeypad.events.get():
-#         print(event)
-        
 while True:
     macropad()
