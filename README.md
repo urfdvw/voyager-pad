@@ -43,7 +43,7 @@ MOUSE_MOVE_X_Y_W (*Replace `X`, `Y` and `W` with integers representing the move 
 ## Macro Examples
 - `ALT`: use the key as alt key
 - `CONTROL|V`: send Ctrl and V key at the same time
-- `CONTROL|A~CONTROL|C`: send Ctrl and A together and then send Ctrl and V together
+- `CONTROL|A~CONTROL|C`: send Ctrl and A together and then send Ctrl and C together
 - `'Hello, World!'`: Type the string out as-is
 
 see the source code for detailed configure example
