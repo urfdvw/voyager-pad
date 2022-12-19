@@ -40,7 +40,7 @@ RIGHT_BUTTON, LEFT_BUTTON, MIDDLE_BUTTON
 ### Mouse move
 MOUSE_MOVE_X_Y_W (*Replace `X`, `Y` and `W` with integers representing the move of x-axis, y-axis and scroll wheel*)
 
-### Macro Examples
+## Macro Examples
 - `ALT`: use the key as alt key
 - `CONTROL|V`: send Ctrl and V key at the same time
 - `CONTROL|A~CONTROL|C`: send Ctrl and A together and then send Ctrl and V together
