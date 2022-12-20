@@ -5,7 +5,7 @@ function mm(mil) = mil * 0.0254;
 board_r = mm(800);
 board_l = mm(4100);
 board_thickness = 1.6;
-print_err = 0.05;
+print_err = 0.1;
 fit_err = 0.1;
 switch_raise = 5;
 cap_raise = 10;
@@ -15,7 +15,7 @@ port_width = 13;
 support_width = 5;
 support_l = 70;
 clip_height = switch_raise - board_thickness;
-clip_depth = 0.5;
+clip_depth = 1;
 clip_width = 10;
 case_thickness = 2;
 err = 0.01;
@@ -122,7 +122,7 @@ module clip() {
     clip_raw();
 }
 
-loc = 10;
+loc = 15;
 
 translate([board_l - support_l + loc, -(board_r + err), case_thickness + board_thickness + port_height + print_err])
 clip();
