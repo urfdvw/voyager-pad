@@ -12,7 +12,7 @@ displayio.release_displays()
 i2c = busio.I2C(board.SCL, board.SDA, frequency=int(1e6))
 display_bus = displayio.I2CDisplay(i2c, device_address=0x3C)
 display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=32)
-macropaddisp = MONO_128x32(configure.configure, display)
+macropaddisp = MONO_128x32(configure, display)
 # define keypad
 macrokeypad = MacroKeyPad(
     key_pins=(
@@ -32,9 +32,9 @@ macrokeypad = MacroKeyPad(
 # define macropad
 macropad = MacroPad(
     macrokeypad=macrokeypad,
-    macropaddisp=macropaddisp,
     configure=configure,
     hid=usb_hid,
+    macropaddisp=macropaddisp,
 )
 
 while True:

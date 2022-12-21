@@ -2,12 +2,12 @@
 A simple macropad featuring xiao rp2040
 
 # Configure
-
+All macro configurations are in file `settings.json`
 ## Format
-```python
-configure = {
+```json
+{
     KEY_NUMBER_OF_LAYER_KEY: {
-        KEY_NUMBER: ("SHORT_DESCRIPTION", "MACRO"),
+        KEY_NUMBER: ["SHORT_DESCRIPTION", "MACRO"],
         ...
     },
     ...
@@ -45,5 +45,6 @@ MOUSE_MOVE_X_Y_W (*Replace `X`, `Y` and `W` with integers representing the move 
 - `CONTROL|V`: send Ctrl and V key at the same time
 - `CONTROL|A~CONTROL|C`: send Ctrl and A together and then send Ctrl and C together
 - `'Hello, World!'`: Type the string out as-is
+- `SHIFT|MOUSE_MOVE_0_0_3`: Hold shift and scroll up(down depends on your system) by 3 lines, no cursor move.
 
-see the source code for detailed configure example
+see the source code for detailed [configure example](./src/settings.json)
