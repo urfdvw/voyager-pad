@@ -14,9 +14,6 @@ port_height = 8;
 port_width = 13;
 support_width = 5;
 support_l = 70;
-clip_height = switch_raise - board_thickness;
-clip_depth = 1;
-clip_width = 10;
 case_thickness = 2;
 err = 0.01;
 large_num = 200;
@@ -107,41 +104,3 @@ module bar_support() {
     }
 }
 bar_support();
-
-module clip_raw() {
-    translate([0, 0.5, 0.5])
-    difference() {
-        cube(1, center=true);
-        rotate([45, 0, 0])
-        translate([-2, 0, -2])
-        cube(4);
-    }
-}
-module clip() {
-    scale([clip_width, clip_depth, clip_height])
-    clip_raw();
-}
-
-loc = 15;
-
-translate([board_l - support_l + loc, -(board_r + err), case_thickness + board_thickness + port_height + print_err])
-clip();
-
-translate([board_l  - loc,  -(board_r + err), case_thickness + board_thickness + port_height + print_err])
-clip();
-
-translate([board_l - support_l + loc, (board_r + err), case_thickness + board_thickness + port_height + print_err])
-rotate([0, 0, 180])
-clip();
-
-translate([board_l  - loc,  (board_r + err), case_thickness + board_thickness + port_height + print_err])
-rotate([0, 0, 180])
-clip();
-
-translate([board_l + err, 0, case_thickness + board_thickness + port_height + print_err])
-rotate([0, 0, 90])
-clip();
-
-translate([- (board_r), 0, case_thickness + board_thickness + port_height + print_err])
-rotate([0, 0, 270])
-clip();
