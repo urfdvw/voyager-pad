@@ -5,8 +5,7 @@ function mm(mil) = mil * 0.0254;
 board_r = mm(800);
 board_l = mm(4100);
 board_thickness = 1.6;
-print_err = 0.1;
-fit_err = 0.1;
+print_err = 0.5;
 plate_raise = 5;
 large_num = 200;
 
