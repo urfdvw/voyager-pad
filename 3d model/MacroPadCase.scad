@@ -65,7 +65,7 @@ module round_support() {
     difference() {
         cylinder(
             h = port_height + board_thickness, 
-            r = board_r + err
+            r = board_r + err + print_err
         );
         translate([0, 0, -large_num / 2])
             cylinder(
@@ -79,8 +79,8 @@ module round_support() {
 
 module bar_support() {
     difference() {
-        translate([board_l - support_l + err, -(board_r + err) ,0])
-            cube([support_l, (board_r + err) * 2, port_height + board_thickness]);
+        translate([board_l - support_l + err, -(board_r + err + print_err) ,0])
+            cube([support_l, (board_r + err + print_err) * 2, port_height + board_thickness]);
         translate([0, -(board_r - support_width), 0])
             cube([large_num, (board_r - support_width) * 2, large_num]);
     }
