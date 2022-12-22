@@ -6,8 +6,8 @@ All macro configurations are in file `settings.json`
 ## Format
 ```json
 {
-    KEY_NUMBER_OF_LAYER_KEY: {
-        KEY_NUMBER: ["SHORT_DESCRIPTION", "MACRO"],
+    "KEY_NUMBER_OF_LAYER_KEY": {
+        "KEY_NUMBER": ["SHORT_DESCRIPTION", "MACRO"],
         ...
     },
     ...
