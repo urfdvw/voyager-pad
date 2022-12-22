@@ -5,9 +5,21 @@ About the format of the file, please check
 https://github.com/urfdvw/macropad-xiao#configure
 """
 import json
-with open('settings.json') as f:
-    configure = json.load(f)
 
+# read json
+with open('settings.json') as f:
+    configure_json = json.load(f)
+
+# change string key to int key
+configure = {
+    int(layer): {
+        int(key_number): configure_json[layer][key_number]
+        for key_number in configure_json[layer]
+    }
+    for layer in configure_json
+}
+
+# change macro to list of list
 macro = {
     layer: {
         key_number: [
