@@ -9,6 +9,8 @@ max_r = mm(850);
 encoder_height = 7.5;
 encoder_dent = 1.5;
 encoder_r = 3;
+encoder_rim_r = 0.6;
+encoder_rim_h = encoder_height / 2;
 knob_height = 10;
 knob_r = 4;
 knob_dent_r = 0.6;
@@ -25,6 +27,12 @@ rod_n = 8;
 head_r = 2.5;
 
 module encoder() {
+    translate([0, 0, -err]) 
+    cylinder(
+        h = encoder_rim_h,
+        r1 = encoder_r + encoder_rim_r,
+        r2 = 0
+    );
     difference() {
         translate([0, 0, -large_num + encoder_height]) 
             cylinder(h = large_num, r = encoder_r + err);
