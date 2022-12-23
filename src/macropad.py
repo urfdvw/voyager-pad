@@ -15,6 +15,7 @@ from adafruit_hid.keycode import Keycode
 from adafruit_hid.consumer_control import ConsumerControl
 from adafruit_hid.consumer_control_code import ConsumerControlCode
 from adafruit_hid.mouse import Mouse
+from adafruit_hid.gamepad import Gamepad
 
 class EventQueue:
     def __init__(self):
@@ -162,7 +163,19 @@ class MONO_128x32(MacroPadDisplay):
     def show_macro(self, key_number):
         text = self.configure[self.layer][key_number][0]
         self.show_macro_text(text)
-
+        
+class Limit:
+    def __init__(self, lower, upper):
+        self.lower = lower
+        self.upper = upper
+    def __call__(self, val):
+        if val > self.upper:
+            return self.upper
+        if val < self.lower:
+            return self.lower
+        return val
+limit = Limit(-127, 127)
+        
 class MacroPad:
     def __init__(
         self,
@@ -183,6 +196,9 @@ class MacroPad:
         self.keyboard_layout = KeyboardLayoutUS(self.keyboard)
         self.consumer_control = ConsumerControl(hid.devices)
         self.mouse = Mouse(hid.devices)
+        self.gamepad = Gamepad(hid.devices)
+        
+        self.gamepad_states = [0 for i in range(4)]
         
         self.cur_macro = ''
 
@@ -201,6 +217,22 @@ class MacroPad:
         elif code.startswith('MOUSE_MOVE'):
             x, y, w = [int(hotkey) for hotkey in code.split('_')[-3:]]
             self.mouse.move(x=x,y=y,wheel=w)
+        elif code.startswith('GAMEPAD_BUTTON'):
+            n = int(code.split('_')[-1])
+            self.gamepad.press_buttons(n)
+        elif code.startswith('JOY_ALTER'):
+            alter = [int(hotkey) for hotkey in code.split('_')[-4:]]
+            self.gamepad_states = [
+                alter[i] + self.gamepad_states[i]
+                for i in range(4)
+            ]
+            self.gamepad.move_joysticks(*[
+                limit(s)
+                for s in self.gamepad_states
+            ])
+        elif code.startswith('JOY_SET'):
+            self.gamepad_states = [int(hotkey) for hotkey in code.split('_')[-4:]]
+            self.gamepad.move_joysticks(*self.gamepad_states)
         else:
             raise ValueError(
                 'Bad Key Code:' + code
@@ -213,6 +245,12 @@ class MacroPad:
             self.consumer_control.release()
         elif code in Mouse.__dict__:
             self.mouse.release(Mouse.__dict__[code])
+        elif code.startswith('GAMEPAD_BUTTON'):
+            n = int(code.split('_')[-1])
+            self.gamepad.release_buttons(n)
+        elif code.startswith('JOY_SET'):
+            self.gamepad_states = [0 for i in range(4)]
+            self.gamepad.move_joysticks(*self.gamepad_states)
 
     def press_hotkey(self, hotkey):
         if len(hotkey[0]) == 0:
@@ -251,6 +289,12 @@ class MacroPad:
         # get layer
         if event.key_number in self.configure.configure:
             if event.pressed:
+                # release all keys
+                self.keyboard.release_all()
+                self.mouse.release_all()
+                self.consumer_control.release()
+                self.gamepad.release_all_buttons()
+                # change layer
                 self.layer = event.key_number
                 if self.macropaddisp:
                     self.macropaddisp.show_layer(self.layer)

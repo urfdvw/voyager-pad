@@ -1,3 +1,6 @@
+import gc
+gc.enable()
+print(gc.mem_free())
 from time import monotonic
 import board
 import busio
@@ -47,6 +50,8 @@ macropad = MacroPad(
     hid=hid,
     macropaddisp=macropaddisp,
 )
+
+print(gc.mem_free())
 
 while True:
     try:
