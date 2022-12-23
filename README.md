@@ -39,6 +39,10 @@ RECORD, FAST_FORWARD, REWIND, SCAN_NEXT_TRACK, SCAN_PREVIOUS_TRACK, STOP, EJECT,
 RIGHT_BUTTON, LEFT_BUTTON, MIDDLE_BUTTON
 ### Mouse move
 MOUSE_MOVE_X_Y_W (*Replace `X`, `Y` and `W` with integers representing the move of x-axis, y-axis and scroll wheel*)
+### Gamepad buttons
+GAMEPAD_BUTTON_N (*REPLACE `N` with button number, within and include 1 to 16)
+### Gamepad joysticks
+JOY_SET_X_Y_Z_RZ, JOY_ALTER_X_Y_Z_RZ (*Replace `X`, `Y`, `Z` and `RZ` with integers representing the move of corresponding joystick, within and include -127 to 127 *)
 
 ## Macro Examples
 - `ALT`: use the key as alt key
