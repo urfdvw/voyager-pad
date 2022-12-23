@@ -1,3 +1,4 @@
+from time import monotonic
 import board
 import busio
 import usb_hid
@@ -29,13 +30,33 @@ macrokeypad = MacroKeyPad(
         board.D7, # B
     )
 )
+# hid
+while True:
+    try:
+        macropaddisp.show_layer_text('USB connecting')
+        hid = usb_hid
+        macropaddisp.show_layer(-1)
+        break
+    except Exception as e:
+        print(e)
+        pass
 # define macropad
 macropad = MacroPad(
     macrokeypad=macrokeypad,
     configure=configure,
-    hid=usb_hid,
+    hid=hid,
     macropaddisp=macropaddisp,
 )
 
 while True:
-    macropad()
+    try:
+        macropad()
+    except Exception as e:
+        print(e)
+        macropaddisp.show_layer_text(str(e))
+        start = monotonic()
+        # display the message for 5 seconds
+        while monotonic() - start < 5:
+            pass
+        # back to macropad program
+        macropaddisp.show_layer(-1)

@@ -106,17 +106,16 @@ class MacroPadDisplay:
         self.layer = -1
         self.state = 0
 
-    def show_layer(self, text, layer):
+    def show_layer_text(self, text):
         if (self.layer_lable.text == text
         and self.state == 0):
             return
         self.state = 0
-        self.layer = layer
         self.layer_lable.text = text
         self.layer_group.hidden = False
         self.macro_group.hidden = True
 
-    def show_macro(self, text):
+    def show_macro_text(self, text):
         if (self.macro_lable.text == text
         and self.state == 1):
             return
@@ -156,12 +155,13 @@ class MONO_128x32(MacroPadDisplay):
         self.show_layer(-1)
 
     def show_layer(self, layer):
+        self.layer = layer
         text = self.layer_text[layer]
-        super().show_layer(text, layer)
+        self.show_layer_text(text)
 
     def show_macro(self, key_number):
         text = self.configure[self.layer][key_number][0]
-        super().show_macro(text)
+        self.show_macro_text(text)
 
 class MacroPad:
     def __init__(
@@ -183,6 +183,8 @@ class MacroPad:
         self.keyboard_layout = KeyboardLayoutUS(self.keyboard)
         self.consumer_control = ConsumerControl(hid.devices)
         self.mouse = Mouse(hid.devices)
+        
+        self.cur_macro = ''
 
         if self.macropaddisp:
             self.start_time = monotonic()
@@ -199,6 +201,10 @@ class MacroPad:
         elif code.startswith('MOUSE_MOVE'):
             x, y, w = [int(hotkey) for hotkey in code.split('_')[-3:]]
             self.mouse.move(x=x,y=y,wheel=w)
+        else:
+            raise ValueError(
+                'Bad Key Code:' + code
+            )
 
     def release_code(self, code):
         if code in Keycode.__dict__:
@@ -254,17 +260,17 @@ class MacroPad:
                     self.macropaddisp.show_layer(self.layer)
         # get macro
         else:
-            macro = self.configure.macro[self.layer][event.key_number]
-
-            # print(macro)
+            self.cur_macro = self.configure.macro[self.layer][event.key_number]
+            
+            # print(self.cur_macro)
             if event.pressed:
-                for i in range(len(macro)):
-                    self.press_hotkey(macro[i])
-                    if i != len(macro) - 1:
-                        self.release_hotkey(macro[i])
+                for i in range(len(self.cur_macro)):
+                    self.press_hotkey(self.cur_macro[i])
+                    if i != len(self.cur_macro) - 1:
+                        self.release_hotkey(self.cur_macro[i])
                 if self.macropaddisp:
                     self.macropaddisp.show_macro(event.key_number)
                     self.displaying_macro = True
                     self.start_time = monotonic()
             else:
-                self.release_hotkey(macro[-1])
+                self.release_hotkey(self.cur_macro[-1])
