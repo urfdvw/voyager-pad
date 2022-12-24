@@ -145,7 +145,7 @@ class MONO_128x32(MacroPadDisplay):
         self.layer_lable.color=0xFFFFFF
         self.layer_lable.background_color=0x000000
         self.layer_lable.x=0
-        self.layer_lable.y=7
+        self.layer_lable.y=5
         self.layer_lable.line_spacing=0.8
 
         self.macro_lable.color=0xFFFFFF
