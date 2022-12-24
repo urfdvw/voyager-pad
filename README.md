@@ -2,23 +2,8 @@
 A simple macropad featuring xiao rp2040
 
 # Configure
-All macro configurations are in file `settings.json`
-## Format
-```json
-{
-    "KEY_NUMBER_OF_LAYER_KEY": {
-        "KEY_NUMBER": ["SHORT_DESCRIPTION", "MACRO"],
-        ...
-    },
-    ...
-}
-```
 
-Note:
-- The default layer number is `-1`, which is not associated with any key number.
-- You can use any key as layer modifier.
-- SHORT_DESCRIPTION are displayed on the OLED.
-- If there is no description or macro, use `""` as space holder.
+You can set the macros and their names with [this page](https://urfdvw.github.io/macropad-xiao/) https://urfdvw.github.io/macropad-xiao/
 
 ## Macro terminologies and gramma
 - key: a key stroke
@@ -52,3 +37,25 @@ JOY_SET_X_Y_Z_RZ, JOY_ALTER_X_Y_Z_RZ (*Replace `X`, `Y`, `Z` and `RZ` with integ
 - `SHIFT|MOUSE_MOVE_0_0_3`: Hold shift and scroll up(down depends on your system) by 3 lines, no cursor move.
 
 see the source code for detailed [configure example](./src/settings.json)
+
+## Raw setting format
+All macro configurations are in file `settings.json`
+## Format
+```json
+{
+    "KEY_NUMBER_OF_LAYER_KEY": {
+        "KEY_NUMBER": [
+            "SHORT_DESCRIPTION", 
+            "MACRO"
+        ],
+        ...
+    },
+    ...
+}
+```
+
+Note:
+- The default layer number is `-1`, which is not associated with any key number.
+- You can use any key as layer modifier.
+- SHORT_DESCRIPTION are displayed on the OLED.
+- If there is no description or macro, use `""` as space holder.
