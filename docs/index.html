@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Password Keeper Manager</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ext-language_tools.js"></script>
+
+</head>
+
+<body>
+    <h1>Macropad Settings</h1>
+    See supported macros and gramma on 
+    <a href="https://github.com/urfdvw/macropad-xiao#configure">
+        this help page
+    </a>
+    .
+    <div class="toolbar">
+        <text id="filename"></text>
+        <button id="inputfile"> Open Settings</button>
+        <button id="save" onclick='save()'> Save </button>
+        <button onclick="save_code()"> Save as </button>
+    </div>
+    <table id="display"></table>
+    <script type="text/javascript" src="code_basic.js">
+    </script>
+</body>
+
+</html>

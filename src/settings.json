@@ -1,29 +1,92 @@
 {
-    "-1": {
-        "2": ["Mute", "MUTE"],
-        "3": ["Previous", "SCAN_PREVIOUS_TRACK"],
-        "4": ["Play/Pause", "PLAY_PAUSE"],
-        "5": ["Next", "SCAN_NEXT_TRACK"],
-        "6": ["", ""],
-        "7": ["Vol+", "VOLUME_INCREMENT"],
-        "8": ["Vol-", "VOLUME_DECREMENT"]
-    },
-    "0": {
-        "2": ["Select ALl", "CONTROL|A~CONTROL|C"],
-        "3": ["Paste", "CONTROL|V"],
-        "4": ["Greeting", "'Hellow, World!'"],
-        "5": ["Switch APP", "ALT|TAB"],
-        "6": ["", ""],
-        "7": ["TAB>>", "CONTROL|TAB"],
-        "8": ["TAB<<", "SHIFT|CONTROL|TAB"]
-    },
-    "1": {
-        "2": ["M up", "MOUSE_MOVE_0_-10_0"],
-        "3": ["M left", "MOUSE_MOVE_-10_0_0"],
-        "4": ["M right", "MOUSE_MOVE_10_0_0"],
-        "5": ["M Down", "MOUSE_MOVE_0_10_0"],
-        "6": ["", ""],
-        "7": ["Scroll>>", "SHIFT|MOUSE_MOVE_0_0_-3"],
-        "8": ["Scroll<<", "SHIFT|MOUSE_MOVE_0_0_3"]
-    }
+  "0": {
+    "2": [
+      "Select ALL",
+      "CONTROL|A~CONTROL|C"
+    ],
+    "3": [
+      "Paste",
+      "CONTROL|V"
+    ],
+    "4": [
+      "Greeting",
+      "'Hellow, World!'"
+    ],
+    "5": [
+      "Switch APP",
+      "ALT|TAB"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "TAB>>",
+      "CONTROL|TAB"
+    ],
+    "8": [
+      "TAB<<",
+      "SHIFT|CONTROL|TAB"
+    ]
+  },
+  "1": {
+    "2": [
+      "M up",
+      "MOUSE_MOVE_0_-10_0"
+    ],
+    "3": [
+      "M left",
+      "MOUSE_MOVE_-10_0_0"
+    ],
+    "4": [
+      "M right",
+      "MOUSE_MOVE_10_0_0"
+    ],
+    "5": [
+      "M Down",
+      "MOUSE_MOVE_0_10_0"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "Scroll>>",
+      "SHIFT|MOUSE_MOVE_0_0_-3"
+    ],
+    "8": [
+      "Scroll<<",
+      "SHIFT|MOUSE_MOVE_0_0_3"
+    ]
+  },
+  "-1": {
+    "2": [
+      "Mute",
+      "MUTE"
+    ],
+    "3": [
+      "Previous",
+      "SCAN_PREVIOUS_TRACK"
+    ],
+    "4": [
+      "Play/Pause",
+      "PLAY_PAUSE"
+    ],
+    "5": [
+      "Next",
+      "SCAN_NEXT_TRACK"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "Vol+",
+      "VOLUME_INCREMENT"
+    ],
+    "8": [
+      "Vol-",
+      "VOLUME_DECREMENT"
+    ]
+  }
 }
