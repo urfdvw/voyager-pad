@@ -215,13 +215,13 @@ class MacroPad:
         elif code in Mouse.__dict__:
             self.mouse.press(Mouse.__dict__[code])
         elif code.startswith('MOUSE_MOVE'):
-            x, y, w = [int(hotkey) for hotkey in code.split('_')[-3:]]
+            x, y, w = [int(axis) for axis in code.split('_')[-3:]]
             self.mouse.move(x=x,y=y,wheel=w)
         elif code.startswith('GAMEPAD_BUTTON'):
             n = int(code.split('_')[-1])
             self.gamepad.press_buttons(n)
         elif code.startswith('JOY_ALTER'):
-            alter = [int(hotkey) for hotkey in code.split('_')[-4:]]
+            alter = [int(axis) for axis in code.split('_')[-4:]]
             self.gamepad_states = [
                 alter[i] + self.gamepad_states[i]
                 for i in range(4)
@@ -231,7 +231,16 @@ class MacroPad:
                 for s in self.gamepad_states
             ])
         elif code.startswith('JOY_SET'):
-            self.gamepad_states = [int(hotkey) for hotkey in code.split('_')[-4:]]
+            self.gamepad_states = [
+                int(axis) if int(axis) else self.gamepad_states[i]
+                for i, axis in enumerate(code.split('_')[-4:])
+            ]
+            self.gamepad.move_joysticks(*[
+                limit(s)
+                for s in self.gamepad_states
+            ])
+        elif code == 'JOY_CENTER':
+            self.gamepad_states = [0, 0, 0, 0]
             self.gamepad.move_joysticks(*self.gamepad_states)
         else:
             raise ValueError(
@@ -249,8 +258,16 @@ class MacroPad:
             n = int(code.split('_')[-1])
             self.gamepad.release_buttons(n)
         elif code.startswith('JOY_SET'):
-            self.gamepad_states = [0 for i in range(4)]
-            self.gamepad.move_joysticks(*self.gamepad_states)
+            print(self.gamepad_states)
+            if self.n_key_press == 0:
+                self.gamepad_states = [
+                    0 if int(axis) else self.gamepad_states[i]
+                    for i, axis in enumerate(code.split('_')[-4:])
+                ]
+            self.gamepad.move_joysticks(*[
+                limit(s)
+                for s in self.gamepad_states
+            ])
 
     def press_hotkey(self, hotkey):
         if len(hotkey[0]) == 0:

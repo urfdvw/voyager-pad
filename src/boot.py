@@ -40,8 +40,10 @@ gamepad = usb_hid.Device(
 )
 
 usb_hid.enable(
-    (usb_hid.Device.KEYBOARD,
-     usb_hid.Device.MOUSE,
-     usb_hid.Device.CONSUMER_CONTROL,
-     gamepad)
+    (
+        gamepad,
+        usb_hid.Device.KEYBOARD,
+        usb_hid.Device.MOUSE,
+        usb_hid.Device.CONSUMER_CONTROL,
+    )
 )
