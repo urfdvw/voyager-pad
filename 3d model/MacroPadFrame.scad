@@ -9,7 +9,7 @@ print_err = 0.5;
 plate_raise = 5;
 large_num = 200;
 
-frame_height = plate_raise - board_thickness - print_err;
+frame_height = plate_raise - board_thickness;
 frame_thick = 1.5;
 frame_r = board_r - print_err;
 frame_l = board_l - print_err;
