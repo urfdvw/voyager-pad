@@ -47,8 +47,7 @@ JOY_CENTER
 see the source code for detailed [configure example](./src/settings.json)
 
 ## Raw setting format
-All macro configurations are in file `settings.json`
-## Format
+All macro configurations are in file `settings.json` with format
 ```json
 {
     "KEY_NUMBER_OF_LAYER_KEY": {
