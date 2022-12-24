@@ -3,8 +3,15 @@ A simple macropad featuring xiao rp2040
 
 # Configure
 
-You can set the macros and their names with [this page](https://urfdvw.github.io/macropad-xiao/) https://urfdvw.github.io/macropad-xiao/
-
+## How to configure the macros on the device
+1. Connect the Macropad to computer by USB cable. It will show up as a drive called 'CIRCUITPY'.
+2. Open [this page](https://urfdvw.github.io/macropad-xiao/): https://urfdvw.github.io/macropad-xiao/
+    - Or open 'Set Macro.url' on the 'CIRCUITPY' drive.
+3. In the opened web page, click on `Open 'settings.json'`.
+4. Find the 'settings.json' file on the 'CIRCUITPY' drive and open.
+5. Change the names and macros in the web page.
+6. Click on 'save' in the web page to save changes to the device.
+ 
 ## Macro terminologies and gramma
 - key: a key stroke
 - hotkey: a combination of keys to be send together
