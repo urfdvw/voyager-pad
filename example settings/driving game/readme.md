@@ -23,5 +23,13 @@ Test the gampad settings
 
 Driving Game
 - https://slowroads.io/
+- Dafault layer
+    - encoder is used as steering wheel
+        - best experience in in-cab view, where the action of the wheel sync with the encode
+    - button 5 is gas paddle
+        - 4 is gentle gas paddle
+    - button 2 is break
+        - 3 is gentle break
+- Layer 0 can be mapped to other function switches as you like
 - suggested in game cotrol settings
 ![](2022-12-26-16-23-19.png)
