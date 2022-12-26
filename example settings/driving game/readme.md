@@ -3,7 +3,7 @@
 replace the 'settings.json' in 'CIRCUITPY' drive with the one in this folder to try out.
 
 # Driving Game
-This is mainly an example of Gamepad.
+This is an example of Gamepad.
 
 ## Layers
 Layer -1
