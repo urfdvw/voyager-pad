@@ -1,2 +1,0 @@
-- https://devicetests.com/controller-tester
-- https://slowroads.io/
