@@ -23,9 +23,9 @@ configure = {
 macro = {
     layer: {
         key_number: [
-            [key.strip() for key in hotkey.split( '|')]
+            [key.strip() for key in hotkey.split('|')]
             for hotkey
-            in configure[layer][key_number][1].split( '~')
+            in configure[layer][key_number][1].split('~')
         ]
         for key_number in configure[layer]
     }
