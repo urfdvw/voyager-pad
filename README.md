@@ -44,7 +44,7 @@ JOY_CENTER
 - `'Hello, World!'`: Type the string out as-is
 - `SHIFT|MOUSE_MOVE_0_0_3`: Hold shift and scroll up(down depends on your system) by 3 lines, no cursor move.
 
-see the source code for detailed [configure example](./src/settings.json)
+see the source code for detailed ['settings.json' examples](https://github.com/urfdvw/macropad-xiao/tree/main/example%20settings)
 
 ## Raw setting format
 All macro configurations are in file `settings.json` with format
