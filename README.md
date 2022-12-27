@@ -24,6 +24,5 @@ A CircuitPython based macropad featuring xiao rp2040.
 - adafruit_framebuf.mpy
 
 ## Planned Features
-- Wait macro for more complex sequence (short term)
 - On device profile switch (mid term)
 - Auto completion on setting web site (long term)
