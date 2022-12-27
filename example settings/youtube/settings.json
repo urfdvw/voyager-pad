@@ -1,0 +1,92 @@
+{
+  "0": {
+    "2": [
+      "Speed-",
+      "SHIFT|COMMA"
+    ],
+    "3": [
+      "Speed+",
+      "SHIFT|PERIOD"
+    ],
+    "4": [
+      "10s<<",
+      "J"
+    ],
+    "5": [
+      "10s>>",
+      "L"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "1f>",
+      "PERIOD"
+    ],
+    "8": [
+      "1f<",
+      "COMMA"
+    ]
+  },
+  "1": {
+    "2": [
+      "CC",
+      "C"
+    ],
+    "3": [
+      "Small scr",
+      "I"
+    ],
+    "4": [
+      "Theater",
+      "T"
+    ],
+    "5": [
+      "Full scr",
+      "F"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "Bright+",
+      "BRIGHTNESS_INCREMENT"
+    ],
+    "8": [
+      "Bright-",
+      "BRIGHTNESS_DECREMENT"
+    ]
+  },
+  "-1": {
+    "2": [
+      "Mute",
+      "M"
+    ],
+    "3": [
+      "Prev",
+      "SHIFT|P"
+    ],
+    "4": [
+      "Play/Pause",
+      "K"
+    ],
+    "5": [
+      "Next",
+      "SHIFT|N"
+    ],
+    "6": [
+      "Home",
+      "ZERO"
+    ],
+    "7": [
+      "Vol+",
+      "VOLUME_INCREMENT"
+    ],
+    "8": [
+      "Vol-",
+      "VOLUME_DECREMENT"
+    ]
+  }
+}
