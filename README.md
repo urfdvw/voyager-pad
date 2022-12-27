@@ -1,11 +1,13 @@
-# macropad-xiao
-A simple macropad featuring xiao rp2040
+# Voyager Pad
+A CircuitPython based macropad featuring xiao rp2040.
+
+![](./docs/keynumber.png)
 
 # Configure
 
 ## How to configure the macros on the device
-1. Connect the Macropad to computer by USB cable. It will show up as a drive called 'CIRCUITPY'.
-2. Open [this page](https://urfdvw.github.io/macropad-xiao/): https://urfdvw.github.io/macropad-xiao/
+1. Connect the Voyager Pad to computer by USB cable. It will show up as a drive called 'CIRCUITPY'.
+2. Open [this page](https://urfdvw.github.io/voyager-pad/): https://urfdvw.github.io/voyager-pad/
     - Or open 'Set Macro.url' on the 'CIRCUITPY' drive.
 3. In the opened web page, click on `Open 'settings.json'`.
 4. Find the 'settings.json' file on the 'CIRCUITPY' drive and open.
@@ -44,7 +46,7 @@ JOY_CENTER
 - `'Hello, World!'`: Type the string out as-is
 - `SHIFT|MOUSE_MOVE_0_0_3`: Hold shift and scroll up(down depends on your system) by 3 lines, no cursor move.
 
-see the source code for detailed ['settings.json' examples](https://github.com/urfdvw/macropad-xiao/tree/main/example%20settings)
+see the source code for detailed ['settings.json' examples](https://github.com/urfdvw/voyager-pad/tree/main/example%20settings)
 
 ## Raw setting format
 All macro configurations are in file `settings.json` with format

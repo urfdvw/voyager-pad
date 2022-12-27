@@ -2,7 +2,7 @@
 This module parse the json setting to a python singleton
 the actual setting is in file `settings.json`
 About the format of the file, please check
-https://github.com/urfdvw/macropad-xiao#configure
+https://github.com/urfdvw/voyager-pad#configure
 """
 import json
 

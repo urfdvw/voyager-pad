@@ -12,7 +12,7 @@ ignore = [
 directory = pathlib.Path("./src")
 
 
-with zipfile.ZipFile("./release/latest.zip", mode="w") as archive:
+with zipfile.ZipFile("./release/voyager_pad_firmware_x.x.x.zip", mode="w") as archive:
     for file_path in directory.rglob("*"):
         for f in ignore:
             if str(file_path).endswith(f):

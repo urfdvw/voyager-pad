@@ -3,7 +3,7 @@
 replace the 'settings.json' in 'CIRCUITPY' drive with the one in this folder to try out.
 
 # Multimedia
-This is an example of how to use the macropad for media play back.
+This is an example of how to use the Voyager Pad for media play back.
 
 ## Layers
 Layer -1: Example of regular media control
