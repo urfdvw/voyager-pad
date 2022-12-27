@@ -5,6 +5,9 @@ replace the 'settings.json' in 'CIRCUITPY' drive with the one in this folder to 
 # Driving Game
 This is an example of Gamepad.
 
+[![Quick introduction to CircuitPython Online IDE](https://img.youtube.com/vi/fomy7w-zMtc/0.jpg)](https://www.youtube.com/watch?v=fomy7w-zMtc)
+[](https://stackoverflow.com/a/16079387/7037749)
+
 ## Layers
 Layer -1
 - button 2~5 are different amount of y-axis.
