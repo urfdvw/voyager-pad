@@ -1,5 +1,5 @@
 # python native
-from time import monotonic
+from time import monotonic, sleep
 # hardware libs
 import rotaryio
 import keypad
@@ -242,6 +242,9 @@ class MacroPad:
         elif code == 'JOY_CENTER':
             self.gamepad_states = [0, 0, 0, 0]
             self.gamepad.move_joysticks(*self.gamepad_states)
+        elif code.startswith('WAIT'):
+            ms = int(code.split('_')[-1])
+            sleep(ms / 1000)
         else:
             raise ValueError(
                 'Bad Key Code:' + code
