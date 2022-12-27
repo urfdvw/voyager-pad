@@ -6,6 +6,8 @@ A CircuitPython based macropad featuring xiao rp2040.
 - [How to configure the device to use different macros](./guides/configure.md)
 - [Example use cases](https://github.com/urfdvw/voyager-pad/tree/main/example%20settings)
 - [How to update the firmware of the device](https://github.com/urfdvw/voyager-pad/releases)
+- How to make a Voyager Pad for yourself (coming soon)
+- How to use Voyager Pad code on other macropads (comming soon)
 
 ## Dependencies
 - CircuitPython7.3.3
