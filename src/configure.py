@@ -2,7 +2,7 @@
 This module parse the json setting to a python singleton
 the actual setting is in file `settings.json`
 About the format of the file, please check
-https://github.com/urfdvw/voyager-pad#configure
+https://github.com/urfdvw/voyager-pad/blob/main/guides/configure.md
 """
 import json
 
