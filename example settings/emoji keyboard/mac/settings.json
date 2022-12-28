@@ -1,0 +1,92 @@
+{
+  "0": {
+    "2": [
+      "Thanks",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'hands pressed together'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "3": [
+      "Congrats",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'party popper'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "4": [
+      "Love",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'growing heart'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "5": [
+      "Smile",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'Grinning Face with Smiling Eyes'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "",
+      ""
+    ],
+    "8": [
+      "",
+      ""
+    ]
+  },
+  "1": {
+    "2": [
+      "Facepalm",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'woman facepalm'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "3": [
+      "Laughing",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'Rolling on the floor laughing'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "4": [
+      "Cry",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'Loudly crying face'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "5": [
+      "Shrug",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'Shrug'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "",
+      ""
+    ],
+    "8": [
+      "",
+      ""
+    ]
+  },
+  "-1": {
+    "2": [
+      "Hi",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'waving hand'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "3": [
+      "Good",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'thumbs up'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "4": [
+      "OK",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'ok hand sign'~WAIT_500~ENTER~RIGHT_ARROW~WAIT_300~ENTER"
+    ],
+    "5": [
+      "Shake",
+      "CONTROL|WAIT_50|COMMAND|WAIT_50|SPACE~WAIT_300~'handshake'~WAIT_500~ENTER~WAIT_300~ENTER"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "",
+      ""
+    ],
+    "8": [
+      "",
+      ""
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "0": {
+    "2": [
+      "Thanks",
+      "WINDOWS|PERIOD~WAIT_100~'folded hands'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "3": [
+      "Congrats",
+      "WINDOWS|PERIOD~WAIT_100~'party popper'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "4": [
+      "Love",
+      "WINDOWS|PERIOD~WAIT_100~'growing heart'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "5": [
+      "Smile",
+      "WINDOWS|PERIOD~WAIT_100~'Grinning Face with Smiling Eyes'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "",
+      ""
+    ],
+    "8": [
+      "",
+      ""
+    ]
+  },
+  "1": {
+    "2": [
+      "Facepalm",
+      "WINDOWS|PERIOD~WAIT_100~'woman facepalm'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "3": [
+      "Laughing",
+      "WINDOWS|PERIOD~WAIT_100~'Rolling on the floor laughing'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "4": [
+      "Cry",
+      "WINDOWS|PERIOD~WAIT_100~'Loudly crying face'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "5": [
+      "Shrug",
+      "WINDOWS|PERIOD~WAIT_100~'Shrug'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "",
+      ""
+    ],
+    "8": [
+      "",
+      ""
+    ]
+  },
+  "-1": {
+    "2": [
+      "Hi",
+      "WINDOWS|PERIOD~WAIT_100~'waving hand'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "3": [
+      "Good",
+      "WINDOWS|PERIOD~WAIT_100~'thumbs up'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "4": [
+      "OK",
+      "WINDOWS|PERIOD~WAIT_100~'ok hand'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "5": [
+      "Shake",
+      "WINDOWS|PERIOD~WAIT_100~'handshake'~ENTER~WAIT_100~ESCAPE"
+    ],
+    "6": [
+      "",
+      ""
+    ],
+    "7": [
+      "",
+      ""
+    ],
+    "8": [
+      "",
+      ""
+    ]
+  }
+}
