@@ -2,6 +2,3 @@ Adafruit CircuitPython 10.2.1 on 2026-05-13; Seeeduino XIAO RP2040 with rp2040
 Board ID:seeeduino_xiao_rp2040
 UID:4150325537323115
 boot.py output:
-Traceback (most recent call last):
-  File "boot.py", line 6, in <module>
-AttributeError: 'module' object has no attribute 'disable_autoreload'

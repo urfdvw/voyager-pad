@@ -78,6 +78,32 @@ class MacroKeyPad:
         return self._events
 
 
+
+# Shared layout constants + text-building helper, used by BOTH display
+# renderers below (the OLED's MONO_128x32 and the USB video mirror
+# USBVideoMirror) so the two stay visually in sync and the per-layer
+# text-wrapping logic isn't duplicated between them.
+LAYER_TEXT_Y = 5
+MACRO_TEXT_Y = 15
+MACRO_TEXT_SCALE = 2
+
+
+def build_layer_text(configure_data, width_px=128, char_width=6):
+    """Build the per-layer wrapped summary text (e.g. '2:Mute 3:Prev ...')
+    shown on both displays, from a configure module's `.configure` dict."""
+    return {
+        layer: '\n'.join(wrap_text_to_lines(
+            ' '.join([
+                str(key_number) + ':' + configure_data[layer][key_number][0]
+                for key_number in sorted(configure_data[layer].keys())
+                if configure_data[layer][key_number][0]
+            ])
+        , width_px // char_width)
+        )
+        for layer in configure_data
+    }
+
+
 class MacroPadDisplay:
     def __init__(self, display):
         self.display = display
@@ -99,7 +125,7 @@ class MacroPadDisplay:
         self.macro_lable = Label(
             FONT,
             text='',
-            scale=2,
+            scale=MACRO_TEXT_SCALE,
         )
         self.macro_group.append(self.macro_lable)
 
@@ -129,29 +155,19 @@ class MONO_128x32(MacroPadDisplay):
     def __init__(self, configure, display):
         super().__init__(display)
         self.configure = configure.configure
-        self.layer_text = {
-            layer: '\n'.join(wrap_text_to_lines(
-                ' '.join([
-                    str(key_number) + ':' + self.configure[layer][key_number][0]
-                    for key_number in sorted(self.configure[layer].keys())
-                    if self.configure[layer][key_number][0]
-                ])
-            , 128 // 6)
-            )
-            for layer in self.configure
-        }
+        self.layer_text = build_layer_text(self.configure)
         # print(self.layer_text)
 
         self.layer_lable.color=0xFFFFFF
         self.layer_lable.background_color=0x000000
         self.layer_lable.x=0
-        self.layer_lable.y=5
+        self.layer_lable.y=LAYER_TEXT_Y
         self.layer_lable.line_spacing=0.8
 
         self.macro_lable.color=0xFFFFFF
         self.macro_lable.background_color=0x000000
         self.macro_lable.x=0
-        self.macro_lable.y=15
+        self.macro_lable.y=MACRO_TEXT_Y
         
         self.show_layer(-1)
 
@@ -163,6 +179,117 @@ class MONO_128x32(MacroPadDisplay):
     def show_macro(self, key_number):
         text = self.configure[self.layer][key_number][0]
         self.show_macro_text(text)
+
+
+class USBVideoMirror:
+    """Mirrors the same layer/macro text shown on the OLED to a USB video
+    (UVC) framebuffer (usb_video.USBFramebuffer, enabled in boot.py).
+
+    This board's CircuitPython build only supports a single displayio
+    Display at a time, so the USB video output cannot be wrapped in its
+    own framebufferio.FramebufferDisplay while the OLED is active. Instead
+    this renders the built-in terminalio font directly onto a private
+    displayio.Bitmap "canvas" and pushes the result as raw RGB565 pixels
+    into the framebuffer's buffer protocol, bypassing displayio.Display
+    entirely."""
+
+    def __init__(self, configure, framebuffer):
+        self.configure = configure.configure
+        self.layer_text = build_layer_text(self.configure)
+        self.layer = -1
+        self.state = 0
+        self._layer_cache = None
+        self._macro_cache = None
+
+        self.fb = framebuffer
+        self.width = framebuffer.width
+        self.height = framebuffer.height
+        self.canvas = displayio.Bitmap(self.width, self.height, 2)
+        self.mv = memoryview(framebuffer)
+
+    def _clear(self):
+        for i in range(self.width * self.height):
+            self.canvas[i] = 0
+
+    def _draw_text(self, text, x0, y0, scale=1):
+        # Label anchors 'y' at the vertical center of the glyph cell
+        # (bounding_box top is -6 in font-native units); match that here
+        # so the mirrored text lines up with the OLED's Label-based text.
+        x, y = x0, y0 - 6 * scale
+        for ch in text:
+            if ch == '\n':
+                y += int(12 * scale * 0.8)
+                x = x0
+                continue
+            gl = FONT.get_glyph(ord(ch))
+            if gl is None:
+                x += 6 * scale
+                continue
+            gx0 = gl.tile_index * gl.width
+            for row in range(gl.height):
+                for col in range(gl.width):
+                    if gl.bitmap[gx0 + col, row]:
+                        for sy in range(scale):
+                            for sx in range(scale):
+                                px = x + col * scale + sx
+                                py = y + row * scale + sy
+                                if 0 <= px < self.width and 0 <= py < self.height:
+                                    self.canvas[px, py] = 1
+            x += gl.shift_x * scale
+
+    def _push(self):
+        for i in range(self.width * self.height):
+            self.mv[i] = 0xFFFF if self.canvas[i] else 0x0000
+        self.fb.refresh()
+
+    def show_layer_text(self, text):
+        if text == self._layer_cache and self.state == 0:
+            return
+        self.state = 0
+        self._layer_cache = text
+        self._clear()
+        self._draw_text(text, 0, LAYER_TEXT_Y, scale=1)
+        self._push()
+
+    def show_macro_text(self, text):
+        if text == self._macro_cache and self.state == 1:
+            return
+        self.state = 1
+        self._macro_cache = text
+        self._clear()
+        self._draw_text(text, 0, MACRO_TEXT_Y, scale=MACRO_TEXT_SCALE)
+        self._push()
+
+    def show_layer(self, layer):
+        self.layer = layer
+        self.show_layer_text(self.layer_text[layer])
+
+    def show_macro(self, key_number):
+        self.show_macro_text(self.configure[self.layer][key_number][0])
+
+
+class MultiDisplay:
+    """Forwards display calls to multiple display-wrapper objects (e.g. an
+    adafruit_displayio_ssd1306 OLED and a usb_video framebuffer) so the same
+    content can be shown/mirrored on all of them at once."""
+    def __init__(self, displays):
+        self.displays = displays
+
+    def show_layer_text(self, text):
+        for d in self.displays:
+            d.show_layer_text(text)
+
+    def show_macro_text(self, text):
+        for d in self.displays:
+            d.show_macro_text(text)
+
+    def show_layer(self, layer):
+        for d in self.displays:
+            d.show_layer(layer)
+
+    def show_macro(self, key_number):
+        for d in self.displays:
+            d.show_macro(key_number)
 
 
 class MacroPad:

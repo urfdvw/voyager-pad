@@ -2,12 +2,13 @@ from time import monotonic
 import board
 import busio
 import usb_hid
+import usb_video
 import configure
 import displayio
 import i2cdisplaybus
 import adafruit_displayio_ssd1306
 
-from macropad import MacroKeyPad, MONO_128x32, MacroPad
+from macropad import MacroKeyPad, MONO_128x32, MacroPad, MultiDisplay, USBVideoMirror
 
 # define display
 displayio.release_displays()
@@ -15,7 +16,15 @@ print('\n' * 10 + 'Hello!')
 i2c = busio.I2C(board.SCL, board.SDA, frequency=int(1e6))
 display_bus = i2cdisplaybus.I2CDisplayBus(i2c, device_address=0x3C)
 display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=32)
-macropaddisp = MONO_128x32(configure, display)
+oled_macropaddisp = MONO_128x32(configure, display)
+# Mirror the OLED content to a USB video (UVC) framebuffer, so the host
+# computer can view it as a webcam feed. The framebuffer itself is sized
+# and enabled in boot.py (usb_video.enable_framebuffer). Note: this board's
+# CircuitPython build only supports a single displayio Display at a time,
+# so the USB video side is driven manually (see USBVideoMirror) instead of
+# a second framebufferio.FramebufferDisplay.
+usb_macropaddisp = USBVideoMirror(configure, usb_video.USBFramebuffer())
+macropaddisp = MultiDisplay([oled_macropaddisp, usb_macropaddisp])
 # define keypad
 macrokeypad = MacroKeyPad(
     key_pins=(
