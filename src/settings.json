@@ -1,84 +1,84 @@
 {
   "0": {
     "2": [
-      "Select ALL",
-      "CONTROL|A~CONTROL|C"
+      "Speed-",
+      "SHIFT|COMMA"
     ],
     "3": [
-      "Paste",
-      "CONTROL|V"
+      "Speed+",
+      "SHIFT|PERIOD"
     ],
     "4": [
-      "Greeting",
-      "'Hellow, World!'"
+      "10s<<",
+      "J"
     ],
     "5": [
-      "Switch APP",
-      "ALT|TAB"
+      "10s>>",
+      "L"
     ],
     "6": [
       "",
       ""
     ],
     "7": [
-      "TAB>>",
-      "CONTROL|TAB"
+      "1f>",
+      "PERIOD"
     ],
     "8": [
-      "TAB<<",
-      "SHIFT|CONTROL|TAB"
+      "1f<",
+      "COMMA"
     ]
   },
   "1": {
     "2": [
-      "M up",
-      "MOUSE_MOVE_0_-10_0"
+      "CC",
+      "C"
     ],
     "3": [
-      "M left",
-      "MOUSE_MOVE_-10_0_0"
+      "Small scr",
+      "I"
     ],
     "4": [
-      "M right",
-      "MOUSE_MOVE_10_0_0"
+      "Theater",
+      "T"
     ],
     "5": [
-      "M Down",
-      "MOUSE_MOVE_0_10_0"
+      "Full scr",
+      "F"
     ],
     "6": [
       "",
       ""
     ],
     "7": [
-      "Scroll>>",
-      "SHIFT|MOUSE_MOVE_0_0_-3"
+      "Bright+",
+      "BRIGHTNESS_INCREMENT"
     ],
     "8": [
-      "Scroll<<",
-      "SHIFT|MOUSE_MOVE_0_0_3"
+      "Bright-",
+      "BRIGHTNESS_DECREMENT"
     ]
   },
   "-1": {
     "2": [
       "Mute",
-      "MUTE"
+      "M"
     ],
     "3": [
-      "Previous",
-      "SCAN_PREVIOUS_TRACK"
+      "Prev",
+      "SHIFT|P"
     ],
     "4": [
       "Play/Pause",
-      "PLAY_PAUSE"
+      "K"
     ],
     "5": [
       "Next",
-      "SCAN_NEXT_TRACK"
+      "SHIFT|N"
     ],
     "6": [
-      "",
-      ""
+      "Home",
+      "ZERO"
     ],
     "7": [
       "Vol+",

@@ -1,20 +1,19 @@
-import gc
-gc.enable()
-print(gc.mem_free())
 from time import monotonic
 import board
 import busio
 import usb_hid
 import configure
 import displayio
+import i2cdisplaybus
 import adafruit_displayio_ssd1306
 
 from macropad import MacroKeyPad, MONO_128x32, MacroPad
 
 # define display
 displayio.release_displays()
+print('\n' * 10 + 'Hello!')
 i2c = busio.I2C(board.SCL, board.SDA, frequency=int(1e6))
-display_bus = displayio.I2CDisplay(i2c, device_address=0x3C)
+display_bus = i2cdisplaybus.I2CDisplayBus(i2c, device_address=0x3C)
 display = adafruit_displayio_ssd1306.SSD1306(display_bus, width=128, height=32)
 macropaddisp = MONO_128x32(configure, display)
 # define keypad
@@ -50,8 +49,6 @@ macropad = MacroPad(
     hid=hid,
     macropaddisp=macropaddisp,
 )
-
-print(gc.mem_free())
 
 while True:
     try:
