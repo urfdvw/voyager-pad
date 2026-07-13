@@ -3,12 +3,21 @@
 
 ## How to configure the macros on the device
 1. Connect the Voyager Pad to computer by USB cable. It will show up as a drive called 'CIRCUITPY'.
-2. Open [this page](https://urfdvw.github.io/voyager-pad/): https://urfdvw.github.io/voyager-pad/
+2. Open [this page](https://urfdvw.github.io/voyager-pad/): https://urfdvw.github.io/voyager-pad/ in Chrome or Edge.
     - Or open 'Set Macro.url' on the 'CIRCUITPY' drive.
-3. In the opened web page, click on `Open 'settings.json'`.
-4. Find the 'settings.json' file on the 'CIRCUITPY' drive and open.
-5. Change the names and macros in the web page.
-6. Click on 'save' in the web page to save changes to the device.
+3. In the opened web page, click on 'Open CIRCUITPY folder' and pick the 'CIRCUITPY' drive.
+    - If the folder has no 'settings.json' yet, a blank valid one is created automatically.
+4. Pick a layer tab, then change the names and macros of the keys.
+    - While typing a macro, matching key codes show up under the field: move with the Up/Down arrows, insert with Enter or Tab, dismiss with Escape.
+    - An invalid macro is outlined in red; hover over the field to see the reason.
+5. Click on 'Save' (or press Ctrl/Cmd+S) to save changes to the device.
+    - Saving is blocked while any macro on any layer is invalid.
+
+## Layers
+- The default layer `-1` is always there; every other layer is used by holding its layer key.
+- Any of keys 0-5 can be a layer key; the knob events (6, 7, 8) cannot.
+- Use '+ Add layer' in the web page to create a layer on an unused key, and 'Remove this layer' to delete the selected one (the default layer cannot be removed).
+- A layer key cannot carry macros of its own, so adding a layer removes that key's macros from every layer, and removing a layer makes its key assignable again.
  
 ## Macro terminologies and gramma
 - key: a key stroke
@@ -29,12 +38,6 @@ RECORD, FAST_FORWARD, REWIND, SCAN_NEXT_TRACK, SCAN_PREVIOUS_TRACK, STOP, EJECT,
 RIGHT_BUTTON, LEFT_BUTTON, MIDDLE_BUTTON
 
 MOUSE_MOVE_X_Y_W (*Replace `X`, `Y` and `W` with integers representing the move of x-axis, y-axis and scroll wheel*)
-### Gamepad
-GAMEPAD_BUTTON_N (*REPLACE `N` with button number, within and include 1 to 16*)
-
-JOY_SET_X_Y_Z_RZ, 
-JOY_ALTER_X_Y_Z_RZ (*Replace `X`, `Y`, `Z` and `RZ` with integers representing the move of corresponding joystick, within and include -127 to 127*, but not all zeros),
-JOY_CENTER
 ### Special (No USB action related)
 WAIT_MS (
     since firmware v1.0.1 
@@ -67,6 +70,6 @@ All macro configurations are in file `settings.json` with format
 
 Note:
 - The default layer number is `-1`, which is not associated with any key number.
-- You can use any key as layer modifier.
+- Any of keys 0-5 can be used as layer modifier; knob events (6, 7, 8) cannot.
 - SHORT_DESCRIPTION are displayed on the OLED.
 - If there is no description or macro, use `""` as space holder.

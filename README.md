@@ -4,10 +4,14 @@ A CircuitPython based macropad featuring xiao rp2040.
 
 ## Features
 - Code-free macros
-    - supports keyboard, mouse, media control, gamepad macros
+    - supports keyboard, mouse, media control macros
     - supports key combinations and sequences
     - supports text typing
 - Display hints on the screen
+- [Web based settings editor](https://urfdvw.github.io/voyager-pad/)
+    - edit macro layers in tabs, add and remove layers
+    - macro validation with clear error messages
+    - autocompletion of key code names
 
 ## Guides
 - [How to configure the device to use different macros](./guides/configure.md)
@@ -25,4 +29,3 @@ A CircuitPython based macropad featuring xiao rp2040.
 
 ## Planned Features
 - On device profile switch (mid term)
-- Auto completion on setting web site (long term)

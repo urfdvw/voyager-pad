@@ -1,0 +1,327 @@
+:root {
+    --bg: #f4f6f9;
+    --panel: #ffffff;
+    --text: #1c2330;
+    --muted: #67707f;
+    --border: #d8dce4;
+    --accent: #2f6fed;
+    --accent-soft: rgba(47, 111, 237, 0.12);
+    --invalid: #d3303f;
+    --invalid-soft: rgba(211, 48, 63, 0.08);
+    --ok: #1a7f42;
+    --shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #12151c;
+        --panel: #1b202b;
+        --text: #e8ebf1;
+        --muted: #98a1b3;
+        --border: #333c4d;
+        --accent: #6ba0ff;
+        --accent-soft: rgba(107, 160, 255, 0.16);
+        --invalid: #f26a76;
+        --invalid-soft: rgba(242, 106, 118, 0.14);
+        --ok: #52c979;
+        --shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0 auto;
+    max-width: 920px;
+    padding: 28px 20px 120px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    line-height: 1.5;
+}
+
+/* Header + toolbar ************************************************/
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 16px;
+    margin-bottom: 18px;
+}
+
+h1 {
+    font-size: 1.45rem;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+}
+
+button {
+    font: inherit;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+}
+
+button:hover:not(:disabled) {
+    border-color: var(--accent);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+}
+
+button.primary:hover:not(:disabled) {
+    filter: brightness(1.08);
+}
+
+.status {
+    flex-basis: 100%;
+    font-size: 0.88rem;
+    color: var(--muted);
+}
+
+.status.error {
+    color: var(--invalid);
+}
+
+.status.ok {
+    color: var(--ok);
+}
+
+/* Help panel ******************************************************/
+
+.help {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 16px;
+    margin-bottom: 18px;
+}
+
+.help summary {
+    cursor: pointer;
+    color: var(--muted);
+    user-select: none;
+}
+
+.help img {
+    display: block;
+    max-width: 100%;
+    margin: 12px 0 4px;
+    border-radius: 8px;
+}
+
+.help a {
+    color: var(--accent);
+}
+
+/* Layer tabs ******************************************************/
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.tab {
+    border-radius: 999px;
+    padding: 6px 16px;
+}
+
+.tab.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.tab.add {
+    border-style: dashed;
+    color: var(--muted);
+}
+
+.tab.remove {
+    margin-left: auto;
+    color: var(--invalid);
+}
+
+.tab.remove:hover:not(:disabled) {
+    border-color: var(--invalid);
+}
+
+/* Key table *******************************************************/
+
+main {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+th {
+    text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+td.key {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-weight: 700;
+    text-align: center;
+    width: 84px;
+}
+
+td.key small {
+    display: block;
+    font-weight: 400;
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+input[type='text'] {
+    font: inherit;
+    color: var(--text);
+    width: 100%;
+    padding: 7px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+input[type='text']:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+input.name {
+    min-width: 130px;
+    max-width: 200px;
+}
+
+input.macro {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.9rem;
+    min-width: 320px;
+}
+
+input.macro.invalid {
+    border-color: var(--invalid);
+    background: var(--invalid-soft);
+}
+
+input.macro.invalid:focus {
+    box-shadow: 0 0 0 3px var(--invalid-soft);
+}
+
+.placeholder {
+    text-align: center;
+    color: var(--muted);
+    border: 1.5px dashed var(--border);
+    border-radius: 12px;
+    padding: 48px 20px;
+}
+
+/* Autocomplete dropdown + add-layer menu **************************/
+
+#autocomplete,
+.menu {
+    position: absolute;
+    z-index: 10;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+#autocomplete {
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    max-height: 236px;
+    overflow-y: auto;
+}
+
+#autocomplete li {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.88rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#autocomplete li:hover {
+    background: var(--accent-soft);
+}
+
+#autocomplete li.selected {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    min-width: 180px;
+}
+
+.menu button {
+    background: none;
+    border: none;
+    border-radius: 6px;
+    text-align: left;
+    padding: 7px 12px;
+}
+
+.menu button:hover {
+    background: var(--accent-soft);
+    border: none;
+}

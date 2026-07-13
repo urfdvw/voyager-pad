@@ -1,32 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Password Keeper Manager</title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ext-language_tools.js"></script>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voyager Pad Settings</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⌨️</text></svg>">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Voyager Pad Settings</h1>
-    Key numbers:<br>
-    <img src="./keynumber.png" width="600"><br>
-    See supported macros and gramma on
-    <a href="https://github.com/urfdvw/voyager-pad/blob/main/guides/configure.md" target="_blank">
-        this help page
-    </a>
-    .
-    <div class="toolbar">
-        <text id="filename"></text>
-        <button id="inputfile"> Open 'settings.json'</button>
-        <button id="save" onclick='save()'> Save </button>
-        <button onclick="save_code()"> Save as </button>
-    </div>
-    <table id="display"></table>
-    <script type="text/javascript" src="code_basic.js">
-    </script>
+    <header>
+        <h1>Voyager Pad Settings</h1>
+        <div class="toolbar">
+            <button id="open-folder">Open CIRCUITPY folder</button>
+            <button id="save" class="primary" disabled>Save</button>
+        </div>
+        <span id="status" class="status"></span>
+    </header>
+
+    <details class="help">
+        <summary>Key numbers &amp; macro help</summary>
+        <img src="./keynumber.png" alt="Key number layout of the Voyager Pad">
+        <p>
+            Combine keys with <code>|</code> (hotkey), chain hotkeys with <code>~</code> (sequence),
+            and type text as-is with <code>'quotes'</code>.
+            See the full macro grammar on
+            <a href="https://github.com/urfdvw/voyager-pad/blob/main/guides/configure.md"
+                target="_blank">the help page</a>.
+        </p>
+    </details>
+
+    <nav id="layer-tabs" class="tabs" hidden></nav>
+    <main id="editor"></main>
+    <p id="placeholder" class="placeholder">
+        Open the CIRCUITPY drive of your Voyager Pad to edit its <code>settings.json</code>.<br>
+        If the file does not exist yet, a blank one is created for you.
+    </p>
+
+    <script src="keycodes.js"></script>
+    <script src="validate.js"></script>
+    <script src="model.js"></script>
+    <script src="autocomplete.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

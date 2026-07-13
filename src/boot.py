@@ -5,8 +5,6 @@ gc.enable()
 import supervisor
 supervisor.runtime.autoreload = False
 
-# Note: GamePad is no longer available as an Adafruit HID device, so only
-# keyboard, mouse and consumer control are enabled here.
 import usb_hid
 
 usb_hid.enable(
